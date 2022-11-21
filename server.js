@@ -14,17 +14,31 @@ app.get("/api/quotes", (req, res, next) => {
     const response = { quotes: quotes };
     res.send(response);
   } else {
-    const person = req.query.person
-    const filteredQutoes = quotes.filter((quote) => quote.person === person)
-    const filteredResponse = {quotes: filteredQutoes}
-    res.send(filteredResponse)
+    const person = req.query.person;
+    const filteredQutoes = quotes.filter((quote) => quote.person === person);
+    const filteredResponse = { quotes: filteredQutoes };
+    res.send(filteredResponse);
   }
 });
 
-app.get("/api/quotes/random", (req, res, next) => {
+app.get("/api/quotes/random", (req, res) => {
   const randomQuote = { quote: getRandomElement(quotes) };
   console.log(randomQuote);
   res.send(randomQuote);
+});
+
+app.post("/api/quotes", (req, res) => {
+  const newQuote = {
+    quote: req.query.quote,
+    person: req.query.person
+  };
+
+  if (newQuote.quote && newQuote.person) {
+    quotes.push(newQuote);
+    res.send({ quote: newQuote });
+  } else {
+    res.status(400).send();
+  }
 });
 
 app.use(express.static("public"));
