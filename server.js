@@ -3,7 +3,7 @@ const express = require("express");
 const app = express();
 
 const { quotes } = require("./data");
-const { getRandomElement } = require("./utils");
+const { getRandomElement, getIndexById } = require("./utils");
 
 const PORT = process.env.PORT || 4001;
 
@@ -48,21 +48,26 @@ app.post("/api/quotes", (req, res) => {
 });
 
 //PUT quote by ID
-
+//Why is my check for quoteIndex !== -1 breaking things???
+//I think my checks werent working because I was using strict compare = in the array the id's are number, but in the params they come as string
 app.put("/api/quotes/:id", (req, res) => {
   const id = req.params.id;
   const quote = req.query.quote;
   const person = req.query.person;
-  const quoteIndex = quotes.indexOf(quotes.find((elem) => elem.id === id))
   if (id && quote && person) {
-    quotes[quoteIndex] = {
-      id: id,
-      quote: quote,
-      person: person,
-    };
-    res.send(quotes[quotes.indexOf(quotes.find((elem) => elem.id === id))]);
+    const quoteIndex = getIndexById(id, quotes)
+    if (quoteIndex !== -1) {
+      quotes[quoteIndex] = {
+        id: id,
+        quote: quote,
+        person: person,
+      };
+      res.send({quote: quotes[quoteIndex]});
+    } else {
+      res.status(400).send('Quote index not found')
+    }
   } else {
-    res.status(400).send();
+    res.status(400).send('Missing parameter in request');
   }
 });
 

@@ -127,9 +127,14 @@ const quotes = quotesOld.map((quote) => quote = {
 //   }
 // ]
 
-console.log(
-  quotes.indexOf(quotes.find((elem) => elem.id === 1))
-)
+const getIndexById = (id, arr) => {
+  return arr.findIndex((quote) => {
+    // return the index if the there is a match 
+    return quote.id == id;
+  });
+}
+
+console.log(getIndexById(4, quotes))
 
 
 module.exports = {
