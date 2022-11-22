@@ -126,7 +126,10 @@ const quotes = quotesOld.map((quote) => quote = {
 //     person: 'Jon von Neumann'
 //   }
 // ]
-console.log(quotes)
+
+console.log(
+  quotes.indexOf(quotes.find((elem) => elem.id === 1))
+)
 
 
 module.exports = {

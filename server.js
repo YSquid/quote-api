@@ -14,7 +14,7 @@ app.get("/api/quotes", (req, res, next) => {
   if (Object.keys(req.query).length === 0) {
     const response = { quotes: quotes };
     res.send(response);
-    console.log(quotes)
+    console.log(quotes);
   } else {
     const person = req.query.person;
     const filteredQutoes = quotes.filter((quote) => quote.person === person);
@@ -35,13 +35,32 @@ app.post("/api/quotes", (req, res) => {
   const newQuote = {
     id: quotes.length,
     quote: req.query.quote,
-    person: req.query.person
+    person: req.query.person,
   };
 
   if (newQuote.quote && newQuote.person) {
     quotes.push(newQuote);
     res.send({ quote: newQuote });
-    res.send(quotes)
+    res.send(quotes);
+  } else {
+    res.status(400).send();
+  }
+});
+
+//PUT quote by ID
+
+app.put("/api/quotes/:id", (req, res) => {
+  const id = req.params.id;
+  const quote = req.query.quote;
+  const person = req.query.person;
+  const quoteIndex = quotes.indexOf(quotes.find((elem) => elem.id === id))
+  if (id && quote && person) {
+    quotes[quoteIndex] = {
+      id: id,
+      quote: quote,
+      person: person,
+    };
+    res.send(quotes[quotes.indexOf(quotes.find((elem) => elem.id === id))]);
   } else {
     res.status(400).send();
   }
